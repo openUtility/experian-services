@@ -3,5 +3,38 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "experian-services": {
+      "projectType": "library",
+      "root": "projects/experian-services",
+      "sourceRoot": "projects/experian-services/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/experian-services/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/experian-services/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/experian-services/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/experian-services/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
   }
 }
