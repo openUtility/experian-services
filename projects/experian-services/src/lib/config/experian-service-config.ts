@@ -6,7 +6,7 @@ export interface ExperianServiceConfig extends ExperianServiceConfig_BASE {
     token: string;
 }
 
-export const OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK = new InjectionToken<ExperianServiceConfig | Signal<ExperianServiceConfig>>('ExperianAddressLookupConfig');
+export const OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK = new InjectionToken<ExperianServiceConfig | Signal<ExperianServiceConfig>>('ExperianServiceConfig');
 
 
 export interface ExperianServiceAddressFormatParser {
@@ -14,4 +14,4 @@ export interface ExperianServiceAddressFormatParser {
     parse<T>(address: ExperianFormatedAddress): T;
 }
 
-export const OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK = new InjectionToken<ExperianServiceAddressFormatParser[]>('ExperianAddressFormatParsers');;
+export const OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK = new InjectionToken<ExperianServiceAddressFormatParser[]>('ExperianServiceAddressFormatParser');;

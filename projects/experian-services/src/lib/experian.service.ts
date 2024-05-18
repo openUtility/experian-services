@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector, Signal, computed, inject, isSignal, signal } from '@angular/core';
 import { lastValueFrom, map } from 'rxjs';
-import { OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK, OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK, ExperianServiceConfig,  } from './config';
+import { OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK, OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK, ExperianServiceConfig, } from './config';
 import { ExperianSearchRequest, ExperianSearchResultData, ResultWrapper, ExperianFormatResultData, ExperianFormatRequest, ExperianSearchAddressSuggestion } from './models';
 import { LinkedEffect, createLinkedEffect } from './util';
 import { ExperianServiceConfig_BASE } from './config/experian-service-config-base';
@@ -11,8 +11,8 @@ const DEFAULTOPTIONS: ExperianServiceConfig_BASE = {
   searchUrl: 'address/search/v1',
   formatUrl: 'address/format/v1',
   useCurrentLocation: false,
-	maxResults: 10,
-	dataSets: ["us-address"],
+  maxResults: 10,
+  dataSets: ["us-address"],
   country: "USA",
   debounce: 700,
   searchOptions: [{
@@ -46,20 +46,20 @@ export class ExperianService {
   constructor() {
     // find/create the default config signal
     if (isSignal(this.injectedConfig)) {
-        this.system_config = computed(() => {
-          const conf = (this.injectedConfig as Signal<ExperianServiceConfig>)();
-          return { ...DEFAULTOPTIONS, ...conf };
-        })
+      this.system_config = computed(() => {
+        const conf = (this.injectedConfig as Signal<ExperianServiceConfig>)();
+        return { ...DEFAULTOPTIONS, ...conf };
+      })
     } else {
-      this.system_config = signal({ ...DEFAULTOPTIONS, ...(this.injectedConfig ?? {})}).asReadonly();
+      this.system_config = signal<ExperianServiceConfig>({ ...DEFAULTOPTIONS, ...(this.injectedConfig ?? {token: ''}) }).asReadonly();
     }
   }
 
-  
+
   private figureoutConfig(config?: ExperianServiceConfig) {
     return { ...this.system_config(), ...(config ?? {}) };
   }
-  
+
   //#region <!-- lookup -->
   private apiLookupCall(content: ExperianSearchRequest, _?: AbortSignal, config?: ExperianServiceConfig): Promise<ExperianSearchResultData> {
     const __conf = this.figureoutConfig(config);
@@ -72,20 +72,20 @@ export class ExperianService {
         map(d => d.result)
       ));
   }
-  
+
   generateLookupService(
     source: Signal<string | ExperianSearchRequest | null>,
-    config?: ExperianServiceConfig): LinkedEffect<ExperianSearchResultData> { 
-      
-      return createLinkedEffect(source, (source, b) => {
-        if (!source) {
-          return Promise.resolve(undefined);
+    config?: ExperianServiceConfig): LinkedEffect<ExperianSearchResultData> {
+
+    return createLinkedEffect(source, (source, b) => {
+      if (!source) {
+        return Promise.resolve(undefined);
       }
       let content = source;
       if (typeof content === 'string') {
         content = this.generateLookupRequest(content, config);
       }
-    
+
       return this.apiLookupCall(content, b, config);
     }, { debounceTimeout: this.system_config().debounce ?? 700 }, this.injector);
   }
@@ -93,7 +93,7 @@ export class ExperianService {
 
   private generateLookupRequest(query: string, config?: ExperianServiceConfig): ExperianSearchRequest {
     const __conf = this.figureoutConfig(config);
-    
+
     return {
       country_iso: __conf.country!,
       datasets: __conf.dataSets!,
@@ -123,13 +123,13 @@ export class ExperianService {
                 }
                 returnDta.push(result);
               }
-            } catch (ex: unknown) { 
+            } catch (ex: unknown) {
               console.error(`Unable to parse [${p.layout}]`, ex);
             }
-            
+
           }
         })
-        
+
       })
     }
     return returnDta;
@@ -137,7 +137,7 @@ export class ExperianService {
 
   private apiFormatCall(key: string, content: ExperianFormatRequest, _?: AbortSignal, config?: ExperianServiceConfig): Promise<ExperianFormatResultData | unknown[]> {
     const __conf = this.figureoutConfig(config);
-    let _url = (__conf.baseUrl ?? '') + (__conf.formatUrl ?? ''); 
+    let _url = (__conf.baseUrl ?? '') + (__conf.formatUrl ?? '');
     _url += (_url.endsWith("/") ? '' : '/') + key;
     if (!__conf.token) {
       throw new Error("Missing Token");
@@ -150,7 +150,7 @@ export class ExperianService {
 
   generateFormatService(
     source: Signal<string | ExperianSearchAddressSuggestion | null>,
-    config?: ExperianServiceConfig): LinkedEffect<unknown> { 
+    config?: ExperianServiceConfig): LinkedEffect<unknown> {
     return createLinkedEffect(source, (source, abort) => {
       if (!source) {
         return Promise.resolve(undefined);
@@ -164,7 +164,7 @@ export class ExperianService {
     request: string | ExperianSearchAddressSuggestion,
     content?: ExperianFormatRequest,
     config?: ExperianServiceConfig): [string, ExperianFormatRequest] {
-    
+
     let returnKey = request;
     if (typeof returnKey !== 'string') {
       returnKey = returnKey.global_address_key;
