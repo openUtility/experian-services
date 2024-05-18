@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector, Signal, computed, inject, isSignal, signal } from '@angular/core';
 import { lastValueFrom, map } from 'rxjs';
-import { EXPERIAN_ADDRESS_LOOKUP_CONFIG_TK, EXPERIAN_ADDRESS_PARSERS_TK, ExperianServiceConfig,  } from './config';
+import { OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK, OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK, ExperianServiceConfig,  } from './config';
 import { ExperianSearchRequest, ExperianSearchResultData, ResultWrapper, ExperianFormatResultData, ExperianFormatRequest, ExperianSearchAddressSuggestion } from './models';
 import { LinkedEffect, createLinkedEffect } from './util';
 import { ExperianServiceConfig_BASE } from './config/experian-service-config-base';
@@ -37,8 +37,8 @@ const DEFAULTOPTIONS: ExperianServiceConfig_BASE = {
   providedIn: 'root'
 })
 export class ExperianService {
-  private readonly injectedConfig = inject(EXPERIAN_ADDRESS_LOOKUP_CONFIG_TK);
-  private readonly addressParsers = inject(EXPERIAN_ADDRESS_PARSERS_TK, { optional: true });
+  private readonly injectedConfig = inject(OPEN_UTILITY_EXPERIAN_SERVICE_CONFIG_TK);
+  private readonly addressParsers = inject(OPEN_UTILITY_EXPERIAN_SERVICE_ADDRESS_PARSERS_TK, { optional: true });
   private readonly system_config: Signal<ExperianServiceConfig>;
   private readonly injector = inject(Injector);
   private readonly _http = inject(HttpClient);
