@@ -1,12 +1,12 @@
 {
   "name": "@openutility/experian-angular-services",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "url": "https://github.com/openUtility/experian-services"
   },
   "peerDependencies": {
-    "@angular/common": "^17.3.0",
-    "@angular/core": "^17.3.0"
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
